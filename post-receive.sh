@@ -6,6 +6,7 @@ ref=$1
 if [ "$ref" = "refs/heads/$BRANCH" ];
 then
 	echo "Ref $ref received. Deploying ${BRANCH} branch to production..."
+	mkdir -p $TARGET
 	git --work-tree=$TARGET --git-dir=$GIT_DIR checkout -f $BRANCH
 	cd $TARGET
 	make
