@@ -1,5 +1,5 @@
 #include <stdio.h>
-//#include <adxl34x-spi.h>
+#include "linux/spi/spi.h"
 
 int main () {
 printf("here");
