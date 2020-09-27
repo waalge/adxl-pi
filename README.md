@@ -50,3 +50,6 @@ This checks whether the push was to the branch `build`.
 If yes, then copy the contents of the repo to a working directory, and run `make`.
 
 It remains to write the Makefile.
+
+## Reaching the adxl34x-spi lib 
+
