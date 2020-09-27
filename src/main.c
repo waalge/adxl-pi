@@ -1,6 +1,7 @@
 #include <stdio.h>
 //#include <adxl34x-spi.h>
 
-void main () {
+int main () {
 printf("here");
+return 0;
 }
