@@ -142,4 +142,5 @@
 #define ADXL_Y_AXIS     1
 #define ADXL_Z_AXIS     2
 
+
 #endif
