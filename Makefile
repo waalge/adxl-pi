@@ -11,7 +11,7 @@ OBJS := $(SRCS:%=$(BUILD_DIR)/$(basename %).o)
 DEPS := $(OBJS:.o=.d)
 
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
-INC_FLAGS := $(addprefix -I,$(INC_DIRS))
+INC_FLAGS := $(addprefix -I,$(INC_DIRS)) -pthread -lpigpio -lrt
 
 CPPFLAGS ?= $(INC_FLAGS) -MMD -MP
 
