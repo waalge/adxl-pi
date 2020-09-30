@@ -53,3 +53,10 @@ It remains to write the Makefile.
 
 ## Reaching the adxl34x-spi lib 
 
+I cannot work out how to do this. 
+There are kernel modules for adxl34x on both my laptop and the pi, but...
+I have no idea how to include them. 
+
+## Writing a new one 
+
+
