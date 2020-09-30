@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "adxl34x.h"
+#include "src/adxl34x.h"
 
 int main () {
 printf("here");
