@@ -15,14 +15,15 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 CPPFLAGS ?= $(INC_FLAGS) -MMD -MP 
 
-CC = gcc
-
-CFLAGS = -Wall -pthread -lpigpio -lrt
-
-CFLAGS := -pthread -lpigpio -lrt
+LDFLAGS := -pthread -lpigpio -lrt
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
+
+# assembly
+$(BUILD_DIR)/%.s.o: %.s
+	$(MKDIR_P) $(dir $@)
+	$(AS) $(ASFLAGS) -c $< -o $@
 
 # c source
 $(BUILD_DIR)/%.c.o: %.c
