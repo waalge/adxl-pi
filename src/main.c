@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <linux/input/adxl34x.h>
 
 
 #define DATA_FORMAT   0x31  // data format register address
