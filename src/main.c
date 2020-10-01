@@ -1,295 +1,210 @@
+/*
+ * SPI testing utility (using spidev driver)
+ *
+ * Copyright (c) 2007  MontaVista Software, Inc.
+ * Copyright (c) 2007  Anton Vorontsov <avorontsov@ru.mvista.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License.
+ *
+ * Cross-compile with cross-gcc -I/path/to/cross-kernel/include
+ */
+
+#include <stdint.h>
+#include <unistd.h>
 #include <stdio.h>
-#include <pigpio.h>
-#include <time.h>
-#include <math.h>
-#include <string.h>
 #include <stdlib.h>
+#include <getopt.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <linux/types.h>
+#include <linux/spi/spidev.h>
 
-#include <linux/input/adxl34x.h>
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 
-
-#define DATA_FORMAT   0x31  // data format register address
-#define DATA_FORMAT_B 0x0B  // data format bytes: +/- 16g range, 13-bit resolution (p. 26 of ADXL345 datasheet)
-#define READ_BIT      0x80
-#define MULTI_BIT     0x40
-#define BW_RATE       0x2C
-#define POWER_CTL     0x2D
-#define DATAX0        0x32
-
-const char codeVersion[3] = "0.2";  // code version number
-const int timeDefault = 5;  // default duration of data stream, seconds
-const int freqDefault = 5;  // default sampling rate of data stream, Hz
-const int freqMax = 3200;  // maximal allowed cmdline arg sampling rate of data stream, Hz
-const int speedSPI = 2000000;  // SPI communication speed, bps
-const int freqMaxSPI = 100000;  // maximal possible communication sampling rate through SPI, Hz (assumption)
-const int coldStartSamples = 2;  // number of samples to be read before outputting data to console (cold start delays)
-const double coldStartDelay = 0.1;  // time delay between cold start reads
-const double accConversion = 2 * 16.0 / 8192.0;  // +/- 16g range, 13-bit resolution
-const double tStatusReport = 1;  // time period of status report if data read to file, seconds
-
-void printUsage() {
-    printf( "adxl345spi (version %s) \n"
-            "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\n"
-            "\n"
-            "Usage: adxl345spi [OPTION]... \n"
-            "Read data from ADXL345 accelerometer through SPI interface on Raspberry Pi.\n"
-            "Online help, docs & bug reports: <https://github.com/nagimov/adxl345spi/>\n"
-            "\n"
-            "Mandatory arguments to long options are mandatory for short options too.\n"
-            "  -s, --save FILE     save data to specified FILE (data printed to command-line\n"
-            "                      output, if not specified)\n"
-            "  -t, --time TIME     set the duration of data stream to TIME seconds\n"
-            "                      (default: %i seconds) [integer]\n"
-            "  -f, --freq FREQ     set the sampling rate of data stream to FREQ samples per\n"
-            "                      second, 1 <= FREQ <= %i (default: %i Hz) [integer]\n"
-            "\n"
-            "Data is streamed in comma separated format, e. g.:\n"
-            "  time,     x,     y,     z\n"
-            "   0.0,  10.0,   0.0, -10.0\n"
-            "   1.0,   5.0,  -5.0,  10.0\n"
-            "   ...,   ...,   ...,   ...\n"
-            "  time shows seconds elapsed since the first reading;\n"
-            "  x, y and z show acceleration along x, y and z axis in fractions of <g>.\n"
-            "\n"
-            "Exit status:\n"
-            "  0  if OK\n"
-            "  1  if error occurred during data reading or wrong cmdline arguments.\n"
-            "", codeVersion, timeDefault, freqMax, freqDefault);
+static void pabort(const char *s)
+{
+	perror(s);
+	abort();
 }
 
-int readBytes(int handle, char *data, int count) {
-    data[0] |= READ_BIT;
-    if (count > 1) data[0] |= MULTI_BIT;
-    return spiXfer(handle, data, data, count);
+static const char *device = "/dev/spidev1.1";
+static uint8_t mode;
+static uint8_t bits = 8;
+static uint32_t speed = 500000;
+static uint16_t delay;
+
+static void transfer(int fd)
+{
+	int ret;
+	uint8_t tx[] = {
+		0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+		0x40, 0x00, 0x00, 0x00, 0x00, 0x95,
+		0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+		0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+		0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+		0xDE, 0xAD, 0xBE, 0xEF, 0xBA, 0xAD,
+		0xF0, 0x0D,
+	};
+	uint8_t rx[ARRAY_SIZE(tx)] = {0, };
+	struct spi_ioc_transfer tr = {
+		.tx_buf = (unsigned long)tx,
+		.rx_buf = (unsigned long)rx,
+		.len = ARRAY_SIZE(tx),
+		.delay_usecs = delay,
+		.speed_hz = speed,
+		.bits_per_word = bits,
+	};
+
+	ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
+	if (ret < 1)
+		pabort("can't send spi message");
+
+	for (ret = 0; ret < ARRAY_SIZE(tx); ret++) {
+		if (!(ret % 6))
+			puts("");
+		printf("%.2X ", rx[ret]);
+	}
+	puts("");
 }
 
-int writeBytes(int handle, char *data, int count) {
-    if (count > 1) data[0] |= MULTI_BIT;
-    return spiWrite(handle, data, count);
+static void print_usage(const char *prog)
+{
+	printf("Usage: %s [-DsbdlHOLC3]\n", prog);
+	puts("  -D --device   device to use (default /dev/spidev1.1)\n"
+	     "  -s --speed    max speed (Hz)\n"
+	     "  -d --delay    delay (usec)\n"
+	     "  -b --bpw      bits per word \n"
+	     "  -l --loop     loopback\n"
+	     "  -H --cpha     clock phase\n"
+	     "  -O --cpol     clock polarity\n"
+	     "  -L --lsb      least significant bit first\n"
+	     "  -C --cs-high  chip select active high\n"
+	     "  -3 --3wire    SI/SO signals shared\n");
+	exit(1);
 }
 
-int main(int argc, char *argv[]) {
-    int i;
+static void parse_opts(int argc, char *argv[])
+{
+	while (1) {
+		static const struct option lopts[] = {
+			{ "device",  1, 0, 'D' },
+			{ "speed",   1, 0, 's' },
+			{ "delay",   1, 0, 'd' },
+			{ "bpw",     1, 0, 'b' },
+			{ "loop",    0, 0, 'l' },
+			{ "cpha",    0, 0, 'H' },
+			{ "cpol",    0, 0, 'O' },
+			{ "lsb",     0, 0, 'L' },
+			{ "cs-high", 0, 0, 'C' },
+			{ "3wire",   0, 0, '3' },
+			{ "no-cs",   0, 0, 'N' },
+			{ "ready",   0, 0, 'R' },
+			{ NULL, 0, 0, 0 },
+		};
+		int c;
 
-    // handling command-line arguments
+		c = getopt_long(argc, argv, "D:s:d:b:lHOLC3NR", lopts, NULL);
 
-    int bSave = 0;
-    char vSave[256] = "";
-    double vTime = timeDefault;
-    double vFreq = freqDefault;
-    for (i = 1; i < argc; i++) {  // skip argv[0] (program name)
-        if ((strcmp(argv[i], "-s") == 0) || (strcmp(argv[i], "--save") == 0)) {
-            bSave = 1;
-            if (i + 1 <= argc - 1) {  // make sure there are enough arguments in argv
-                i++;
-                strcpy(vSave, argv[i]);
-            }
-            else {
-                printUsage();
-                return 1;
-            }
-        }
-        else if ((strcmp(argv[i], "-t") == 0) || (strcmp(argv[i], "--time") == 0)) {
-            if (i + 1 <= argc - 1) {
-                i++;
-                vTime = atoi(argv[i]);
-            }
-            else {
-                printUsage();
-                return 1;
-            }
-        }
-        else if ((strcmp(argv[i], "-f") == 0) || (strcmp(argv[i], "--freq") == 0)) {
-            if (i + 1 <= argc - 1) {
-                i++;
-                vFreq = atoi(argv[i]);
-                if ((vFreq < 1) || (vFreq > 3200)) {
-                    printf("Wrong sampling rate specified!\n\n");
-                    printUsage();
-                    return 1;
-                }
-            }
-            else {
-                printUsage();
-                return 1;
-            }
-        }
-        else {
-            printUsage();
-            return 1;
-        }
-    }
+		if (c == -1)
+			break;
 
-    // reading sensor data
+		switch (c) {
+		case 'D':
+			device = optarg;
+			break;
+		case 's':
+			speed = atoi(optarg);
+			break;
+		case 'd':
+			delay = atoi(optarg);
+			break;
+		case 'b':
+			bits = atoi(optarg);
+			break;
+		case 'l':
+			mode |= SPI_LOOP;
+			break;
+		case 'H':
+			mode |= SPI_CPHA;
+			break;
+		case 'O':
+			mode |= SPI_CPOL;
+			break;
+		case 'L':
+			mode |= SPI_LSB_FIRST;
+			break;
+		case 'C':
+			mode |= SPI_CS_HIGH;
+			break;
+		case '3':
+			mode |= SPI_3WIRE;
+			break;
+		case 'N':
+			mode |= SPI_NO_CS;
+			break;
+		case 'R':
+			mode |= SPI_READY;
+			break;
+		default:
+			print_usage(argv[0]);
+			break;
+		}
+	}
+}
 
-    // SPI sensor setup
-    int samples = vFreq * vTime;
-    int samplesMaxSPI = freqMaxSPI * vTime;
-    int success = 1;
-    int h, bytes;
-    char data[7];
-    int16_t x, y, z;
-    double tStart, tDuration, t;
-    if (gpioInitialise() < 0) {
-        printf("Failed to initialize GPIO!");
-        return 1;
-    }
-    h = spiOpen(0, speedSPI, 3);
-    data[0] = BW_RATE;
-    data[1] = 0x0F;
-    writeBytes(h, data, 2);
-    data[0] = DATA_FORMAT;
-    data[1] = DATA_FORMAT_B;
-    writeBytes(h, data, 2);
-    data[0] = POWER_CTL;
-    data[1] = 0x08;
-    writeBytes(h, data, 2);
+int main(int argc, char *argv[])
+{
+	int ret = 0;
+	int fd;
 
-    double delay = 1.0 / vFreq;  // delay between reads in seconds
+	parse_opts(argc, argv);
 
-    // depending from the output mode (print to cmdline / save to file) data is read in different ways
+	fd = open(device, O_RDWR);
+	if (fd < 0)
+		pabort("can't open device");
 
-    // for cmdline output, data is read directly to the screen with a sampling rate which is *approximately* equal...
-    // but always less than the specified value, since reading takes some time
+	/*
+	 * spi mode
+	 */
+	ret = ioctl(fd, SPI_IOC_WR_MODE, &mode);
+	if (ret == -1)
+		pabort("can't set spi mode");
 
-    if (bSave == 0) {
-        // fake reads to eliminate cold start timing issues (~0.01 s shift of sampling time after the first reading)
-        for (i = 0; i < coldStartSamples; i++) {
-            data[0] = DATAX0;
-            bytes = readBytes(h, data, 7);
-            if (bytes != 7) {
-                success = 0;
-            }
-            time_sleep(coldStartDelay);
-        }
-        // real reads happen here
-        tStart = time_time();
-        for (i = 0; i < samples; i++) {
-            data[0] = DATAX0;
-            bytes = readBytes(h, data, 7);
-            if (bytes == 7) {
-                x = (data[2]<<8)|data[1];
-                y = (data[4]<<8)|data[3];
-                z = (data[6]<<8)|data[5];
-                t = time_time() - tStart;
-                printf("time = %.3f, x = %.3f, y = %.3f, z = %.3f\n",
-                       t, x * accConversion, y * accConversion, z * accConversion);
-                }
-            else {
-                success = 0;
-            }
-            time_sleep(delay);  // pigpio sleep is accurate enough for console output, not necessary to use nanosleep
-        }
-        gpioTerminate();
-        tDuration = time_time() - tStart;  // need to update current time to give a closer estimate of sampling rate
-        printf("%d samples read in %.2f seconds with sampling rate %.1f Hz\n", samples, tDuration, samples/tDuration);
-        if (success == 0) {
-            printf("Error occurred!");
-            return 1;
-        }
-    }
+	ret = ioctl(fd, SPI_IOC_RD_MODE, &mode);
+	if (ret == -1)
+		pabort("can't get spi mode");
 
-    // for the file output, data is read with a maximal possible sampling rate (around 30,000 Hz)...
-    // and then accurately rescaled to *exactly* match the specified sampling rate...
-    // therefore, saved data can be easily analyzed (e. g. with fft)
-    else {
-        // reserve vectors for file-output arrays: time, x, y, z
-        // arrays will not change their lengths, so separate track of the size is not needed
-        double *at, *ax, *ay, *az;
-        at = malloc(samples * sizeof(double));
-        ax = malloc(samples * sizeof(double));
-        ay = malloc(samples * sizeof(double));
-        az = malloc(samples * sizeof(double));
+	/*
+	 * bits per word
+	 */
+	ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &bits);
+	if (ret == -1)
+		pabort("can't set bits per word");
 
-        // reserve vectors for raw data: time, x, y, z
-        // maximal achievable sampling rate depends from the hardware...
-        // in my case, for Raspberry Pi 3 at 2 Mbps SPI bus speed sampling rate never exceeded ~30,000 Hz...
-        // so to be sure that there is always enough memory allocated, freqMaxSPI is set to 60,000 Hz
-        double *rt, *rx, *ry, *rz;
-        rt = malloc(samplesMaxSPI * sizeof(double));
-        rx = malloc(samplesMaxSPI * sizeof(double));
-        ry = malloc(samplesMaxSPI * sizeof(double));
-        rz = malloc(samplesMaxSPI * sizeof(double));
+	ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits);
+	if (ret == -1)
+		pabort("can't get bits per word");
 
-        printf("Reading %d samples in %.1f seconds with sampling rate %.1f Hz...\n", samples, vTime, vFreq);
-        int statusReportedTimes = 0;
-        double tCurrent, tClosest, tError, tErrorPrev, tLeft;
-        int j, jClosest;
+	/*
+	 * max speed hz
+	 */
+	ret = ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
+	if (ret == -1)
+		pabort("can't set max speed hz");
 
-        tStart = time_time();
-        int samplesRead;
-        for (i = 0; i < samplesMaxSPI; i++) {
-            data[0] = DATAX0;
-            bytes = readBytes(h, data, 7);
-            if (bytes == 7) {
-                x = (data[2]<<8)|data[1];
-                y = (data[4]<<8)|data[3];
-                z = (data[6]<<8)|data[5];
-                t = time_time();
-                rx[i] = x * accConversion;
-                ry[i] = y * accConversion;
-                rz[i] = z * accConversion;
-                rt[i] = t - tStart;
-            }
-            else {
-                gpioTerminate();
-                printf("Error occurred!");
-                return 1;
-            }
-            tDuration = t - tStart;
-            if (tDuration > tStatusReport * ((float)statusReportedTimes + 1.0)) {
-                statusReportedTimes++;
-                tLeft = vTime - tDuration;
-                if (tLeft < 0) {
-                    tLeft = 0.0;
-                }
-                printf("%.2f seconds left...\n", tLeft);
-            }
-            if (tDuration > vTime) {  // enough data read
-                samplesRead = i;
-                break;
-            }
-        }
-        gpioTerminate();
-        printf("Writing to the output file...\n");
-        for (i = 0; i < samples; i++) {
-            if (i == 0) {  // always get the first reading from position 0
-                tCurrent = 0.0;
-                jClosest = 0;
-                tClosest = rt[jClosest];
-            }
-            else {
-                tCurrent = (float)i * delay;
-                tError = fabs(tClosest - tCurrent);
-                tErrorPrev = tError;
-                for (j = jClosest; j < samplesRead; j++) {  // lookup starting from previous j value
-                    if (fabs(rt[j] - tCurrent) < tError) {  // in order to save some iterations
-                        jClosest = j;
-                        tClosest = rt[jClosest];
-                        tErrorPrev = tError;
-                        tError = fabs(tClosest - tCurrent);
-                    }
-                    else {
-	                    if (tError > tErrorPrev) {  // if the error starts growing
-    	                	break;                  // break the loop since the minimal error point passed
-	                    }
-                    }
-                }  // when this loop is ended, jClosest and tClosest keep coordinates of the closest (j, t) point
-            }
-            ax[i] = rx[jClosest];
-            ay[i] = ry[jClosest];
-            az[i] = rz[jClosest];
-            at[i] = tCurrent;
-        }
-        FILE *f;
-        f = fopen(vSave, "w");
-        fprintf(f, "time, x, y, z\n");
-        for (i = 0; i < samples; i++) {
-            fprintf(f, "%.5f, %.5f, %.5f, %.5f \n", at[i], ax[i], ay[i], az[i]);
-        }
-        fclose(f);
-    }
+	ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed);
+	if (ret == -1)
+		pabort("can't get max speed hz");
 
-    printf("Done\n");
-    return 0;
+	printf("spi mode: %d\n", mode);
+	printf("bits per word: %d\n", bits);
+	printf("max speed: %d Hz (%d KHz)\n", speed, speed/1000);
+
+	transfer(fd);
+
+	close(fd);
+
+	return ret;
 }
