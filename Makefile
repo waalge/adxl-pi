@@ -17,6 +17,7 @@ CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -pthread -lpigpio -lrt
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	echo $(OBJS)
+	echo $(CC) $(OBJS) -o $@ $(LDFLAGS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
 # assembly
