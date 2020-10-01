@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 
+
 #define DATA_FORMAT   0x31  // data format register address
 #define DATA_FORMAT_B 0x0B  // data format bytes: +/- 16g range, 13-bit resolution (p. 26 of ADXL345 datasheet)
 #define READ_BIT      0x80
