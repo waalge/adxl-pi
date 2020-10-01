@@ -4,7 +4,6 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
-#include <linux/spi/spidev.h>
 
 
 #define DATA_FORMAT   0x31  // data format register address
