@@ -51,7 +51,7 @@ static void transfer(int fd)
 	struct spi_ioc_transfer tr = {
 		.tx_buf = (unsigned long)tx,
 		.rx_buf = (unsigned long)rx,
-		.len = ARRAY_SIZE(tx),
+		.len = 10 * ARRAY_SIZE(tx),
 		.delay_usecs = delay,
 		.speed_hz = speed,
 		.bits_per_word = bits,
