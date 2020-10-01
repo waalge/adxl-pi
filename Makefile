@@ -15,7 +15,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 CFLAGS ?= $(INC_FLAGS) -MMD -MP 
 
-LDFLAGS := -pthread -lpigpio -lrt 
+LDFLAGS := -lpigpio 
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
