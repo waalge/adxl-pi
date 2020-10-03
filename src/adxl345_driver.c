@@ -11,15 +11,9 @@ void printArr(char* arr, int arrLen) {
 }
 
 int readAdxlBytes(int handle, char *data, int count) {
-  printf(" #1* ");
-  printArr(data, count);
   data[0] |= READ_BIT;
-  printf(" #2* ");
-  printArr(data, count);
   if (count > 1)
     data[0] |= MULTI_BIT;
-  printf(" #3* ");
-  printArr(data, count);
   return spiXfer(handle, data, data, count);
 }
 
