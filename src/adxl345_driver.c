@@ -14,7 +14,7 @@ int readAdxlBytes(int handle, int address, int count, unsigned char *data) {
   address |= READ_BIT;
   if (count > 1)
     address |= MULTI_BIT;
-  return spiXfer(handle, (char *)&address, data, count);
+  return spiXfer(handle, (int *)&address, data, count);
 }
 
 int writeAdxlBytes(int handle, char *data, int count) {

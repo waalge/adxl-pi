@@ -32,7 +32,7 @@ void getReading(int h, int16_t *x) {
   int dataLen = 7;
   unsigned char data[dataLen];
   data[0] = DATAX0;
-  int bytes = readAdxlBytes(h, (int)DATAX0, dataLen, data);
+  int bytes = readAdxlBytes(h, DATAX0, dataLen, data);
   printf("* " );
   printArr(data, dataLen);
   if (bytes != dataLen) {
@@ -63,7 +63,7 @@ int main() {
   int success = 1;
   int bytes;
   data[0] = DATAX0;
-  bytes = readAdxlBytes(h, (int)DATAX0, dataLen, data);
+  bytes = readAdxlBytes(h, DATAX0, dataLen, data);
   if (bytes != dataLen) {
     success = 0;
   }
