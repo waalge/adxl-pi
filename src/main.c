@@ -33,7 +33,7 @@ int main() {
     int bytes;
     data[0] = DATAX0;
     bytes = readAdxlBytes(h, data, 7);
-    if (bytes != 100) {
+    if (bytes != 7) {
 	success = 0;
     }
 if (success == 0) {
