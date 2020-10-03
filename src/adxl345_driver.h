@@ -1,3 +1,4 @@
+#include <pigpio.h>
 /* /////////////////// ADXL345 DRIVER FUNDAMENTALS ////////////////// */
 // SOURCE : https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/input/misc/adxl34x.c?id=HEAD
 

@@ -7,12 +7,6 @@
 
 #include "adxl345_driver.h"
 
-#define DATA_FORMAT   0x31  // data format register address
-#define DATA_FORMAT_B 0x0B  // data format bytes: +/- 16g range, 13-bit resolution (p. 26 of ADXL345 datasheet)
-
-#define READ_BIT      0x80
-#define MULTI_BIT     0x40
-
 const int timeDefault = 5;  // default duration of data stream, seconds
 const int freqDefault = 5;  // default sampling rate of data stream, Hz
 const int freqMax = 3200;  // maximal allowed cmdline arg sampling rate of data stream, Hz
@@ -22,26 +16,6 @@ const int coldStartSamples = 2;  // number of samples to be read before outputti
 const double coldStartDelay = 0.1;  // time delay between cold start reads
 const double accConversion = 2 * 16.0 / 8192.0;  // +/- 16g range, 13-bit resolution
 const double tStatusReport = 1;  // time period of status report if data read to file, seconds
-
-int readBytes(int handle, char *data, int count) {
-    data[0] |= READ_BIT;
-    if (count > 1) data[0] |= MULTI_BIT;
-    return spiXfer(handle, data, data, count);
-}
-
-int writeBytes(int handle, char *data, int count) {
-    if (count > 1) data[0] |= MULTI_BIT;
-    return spiWrite(handle, data, count);
-}
-
-int getSpi() {
-    gpioInitialise();
-    if (gpioInitialise() < 0) {
-        printf("Failed to initialize GPIO!");
-        return 1;
-    }
-    return spiOpen(0, speedSPI, 3);
-}
 
 int main(int argc, char *argv[]) {
     // handling command-line arguments

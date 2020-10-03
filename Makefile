@@ -10,7 +10,7 @@ SRCS := $(shell find $(SRC_DIRS) -name "*.cpp" -or -name "*.c" -or -name "*.s")
 OBJS := $(SRCS:%=$(BUILD_DIR)/$(basename %).o)
 DEPS := $(OBJS:.o=.d)
 
-INC_DIRS := src $(shell find $(SRC_DIRS) -type d)
+INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS)) 
 
 CFLAGS ?= $(INC_FLAGS) -MMD -MP 
