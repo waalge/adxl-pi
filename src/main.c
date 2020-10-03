@@ -16,7 +16,7 @@ int setupAdxl(int spiSpeed) {
     xArr[1] = RATE_800_HZ;
     writeAdxlBytes(h, xArr, 2);
     xArr[0] = DATA_FORMAT;
-    xArr[1] = RANGE_PM_2g;
+    xArr[1] = RANGE_PM_4g;
     writeAdxlBytes(h, xArr, 2);
     xArr[0] = POWER_CTL;
     xArr[1] = PCTL_MEASURE;
