@@ -7,17 +7,25 @@
 
 #include "adxl345_driver.h"
 
-#define DATA_FORMAT_B 0x0B  // data format bytes: +/- 16g range, 13-bit resolution (p. 26 of ADXL345 datasheet)
-
 const int timeDefault = 5;  // default duration of data stream, seconds
 const int freqDefault = 5;  // default sampling rate of data stream, Hz
-const int freqMax = 3200;  // maximal allowed cmdline arg sampling rate of data stream, Hz
 const int spiSpeed = 2000000;  // SPI communication speed, bps
-const int freqMaxSPI = 100000;  // maximal possible communication sampling rate through SPI, Hz (assumption)
-const int coldStartSamples = 2;  // number of samples to be read before outputting data to console (cold start delays)
-const double coldStartDelay = 0.1;  // time delay between cold start reads
-const double accConversion = 2 * 16.0 / 8192.0;  // +/- 16g range, 13-bit resolution
-const double tStatusReport = 1;  // time period of status report if data read to file, seconds
+const int spiMaxFreq = 100000;  // maximal possible communication sampling rate through SPI, Hz (assumption)
+
+int setupAdxl(spiSpeed) {
+    int h = openAdxl(spiSpeed); 
+    char xArr[2];
+    xArr[0] = BW_RATE;
+    xArr[1] = RATE_800_HZ;
+    writeAdxlBytes(h, xArr, 2);
+    xArr[0] = DATA_FORMAT;
+    xArr[1] = RANGE_PM_2g;
+    writeAdxlBytes(h, xArr, 2);
+    xArr[0] = POWER_CTL;
+    xArr[1] = PCTL_MEASURE;
+    writeAdxlBytes(h, xArr, 2);
+    return h;
+}
 
 int main(int argc, char *argv[]) {
     // handling command-line arguments
@@ -26,23 +34,23 @@ int main(int argc, char *argv[]) {
     double vFreq = freqDefault;
     // SPI sensor setup
     int samples = vFreq * vTime;
-    int samplesMaxSPI = freqMaxSPI * vTime;
+    int samplesMaxSPI = spiMaxFreq * vTime;
     int success = 1;
     int h, bytes;
-    h = openAdxl(spiSpeed); 
+    h = setupAdxl(spiSpeed); 
 
 
     char data[100];
     int16_t x, y, z;
     double tStart, tDuration, t;
     data[0] = BW_RATE;
-    data[1] = 0x0F;
+    data[1] = RATE_800_HZ;
     writeAdxlBytes(h, data, 2);
     data[0] = DATA_FORMAT;
-    data[1] = DATA_FORMAT_B;
+    data[1] = RANGE_PM_2g;
     writeAdxlBytes(h, data, 2);
     data[0] = POWER_CTL;
-    data[1] = 0x08;
+    data[1] = PCTL_MEASURE;
     writeAdxlBytes(h, data, 2);
 
     double delay = 1.0 / vFreq;  // delay between reads in seconds
