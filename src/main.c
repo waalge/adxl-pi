@@ -34,9 +34,9 @@ void getReading(int h, int16_t * x) {
     if (bytes != dataLen) {
     printf("Error occurred!");
     }
-    x[0] = ((int)data[2]<<8)|(int)data[1];
-    x[1] = ((int)data[4]<<8)|(int)data[3];
-    x[2] = ((int)data[6]<<8)|(int)data[5];
+    x[0] = (data[2]<<8)|data[1];
+    x[1] = (data[4]<<8)|data[3];
+    x[2] = (data[6]<<8)|data[5];
 }
 
 
