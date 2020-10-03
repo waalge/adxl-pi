@@ -47,7 +47,7 @@ int main() {
     conf.dataFormat = RANGE_PM_4g;
     conf.powerCtl = PCTL_MEASURE;
     int h = setupAdxl(spiSpeed, conf); 
-    int dataLen = 10;
+    int dataLen = 7;
     char data[dataLen];
     int16_t x[3];
     int success = 1;
