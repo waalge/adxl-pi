@@ -146,7 +146,7 @@
 
 /* /////////////////// ADXL345 DRIVER FUNDAMENTALS ////////////////// */
 
-int readAdxlBytes(int handle, unsigned int address, unsigned char *data, int count);
+int readAdxlBytes(int handle, unsigned int address, int count, unsigned char *data);
 
 int writeAdxlBytes(int handle, char *data, int count);
 
