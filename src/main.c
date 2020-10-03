@@ -24,6 +24,12 @@ int setupAdxl(int spiSpeed, adxl conf) {
   return h;
 }
 
+void print_arr(char* arr, int arrLen) {
+  for (int loop = 0; loop < arrLen; loop++) {
+    printf("%d ", arr[loop]);
+  }
+}
+
 void getReading(int h, int16_t *x) {
   int dataLen = 8;
   char data[dataLen];
