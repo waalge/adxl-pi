@@ -37,10 +37,15 @@ int main() {
     if (bytes != dataLen) {
 	success = 0;
     }
+
+    x = (data[2]<<8)|data[1];
+    y = (data[4]<<8)|data[3];
+    z = (data[6]<<8)|data[5];
 if (success == 0) {
     printf("Error occurred!");
     return 1;
 }
+   printf("X,Y,Z %d %d %d ", x,y,z);
 
    for(int loop = 0; loop < dataLen; loop++) { 
       printf("%d ", data[loop]);
