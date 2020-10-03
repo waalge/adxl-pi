@@ -7,17 +7,18 @@ void printArr(char* arr, int arrLen) {
   for (int loop = 0; loop < arrLen; loop++) {
     printf("%d ", arr[loop]);
   }
+    printf("\n");
 }
 
 int readAdxlBytes(int handle, char *data, int count) {
-  printf("\n #1* ");
+  printf(" #1* ");
   printArr(data, count);
   data[0] |= READ_BIT;
-  printf("\n #2* ");
+  printf(" #2* ");
   printArr(data, count);
   if (count > 1)
     data[0] |= MULTI_BIT;
-  printf("\n #3* ");
+  printf(" #3* ");
   printArr(data, count);
   return spiXfer(handle, data, data, count);
 }
