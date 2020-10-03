@@ -51,17 +51,15 @@ int main() {
   conf.dataFormat = (RANGE_PM_2g & 3);
   conf.powerCtl = PCTL_MEASURE;
   int h = setupAdxl(spiSpeed, conf);
-  int dataLen = 6;
-  unsigned char data[dataLen];
   int16_t x[3];
   for (int loop = 0; loop < 10; loop++) {
     getReading(h, x);
     msleep(5);
   }
-  getReading(h, x);
   int success = 1;
   int bytes;
-  data[0] = DATAX0;
+  int dataLen = 6;
+  unsigned char data[dataLen];
   bytes = readAdxlBytes(h, DATAX0, dataLen, data);
   if (bytes != dataLen) {
     success = 0;
