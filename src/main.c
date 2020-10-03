@@ -59,7 +59,6 @@ int main() {
     }
     getReading(h, x);
 
-
 if (success == 0) {
     printf("Error occurred!");
     return 1;
