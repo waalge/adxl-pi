@@ -30,7 +30,7 @@ int main() {
     char data[100];
     int16_t x, y, z;
     int success = 1;
-    int h, bytes;
+    int bytes;
     data[0] = 0x01;
     bytes = readAdxlBytes(h, data, 100);
     if (bytes != 100) {
