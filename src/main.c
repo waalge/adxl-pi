@@ -16,10 +16,8 @@ typedef struct {
 	char fifoCtl;
 } adxl;
 
-
-
 int setupAdxl(int spiSpeed, adxl conf) {
-    int h = openAdxl(spiSpeed); 
+    int h = openAdxl(spiSpeed);
     setAdxlRegister(h, BW_RATE, conf.bwRate);
     setAdxlRegister(h, DATA_FORMAT, conf.dataFormat);
     setAdxlRegister(h, POWER_CTL, conf.powerCtl);
@@ -46,7 +44,7 @@ int main() {
     conf.bwRate = RATE_3200_HZ;
     conf.dataFormat = (RANGE_PM_2g & 3);
     conf.powerCtl = PCTL_MEASURE;
-    int h = setupAdxl(spiSpeed, conf); 
+    int h = setupAdxl(spiSpeed, conf);
     int dataLen = 7;
     char data[dataLen];
     int16_t x[3];
@@ -69,10 +67,10 @@ if (success == 0) {
 }
    printf("X,Y,Z %d %d %d\n", x[0], x[1], x[2]);
 
-   for(int loop = 0; loop < dataLen; loop++) { 
+   for(int loop = 0; loop < dataLen; loop++) {
       printf("%d ", data[loop]);
    }
     printf("Done ;( .\n");
     return 0;
-    teardownAdxl(); 
+    teardownAdxl();
 }

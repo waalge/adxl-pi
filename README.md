@@ -3,24 +3,24 @@
 Aims:
 
 * collect accelerometer data using a pi zero w and adxl345
-* learn to develop quickily and efficiently on remote + lower power devices. 
+* learn to develop quickily and efficiently on remote + lower power devices.
 
-## Setup 
+## Setup
 
 ### Setup remote
 
-On remote device (kiwipi) 
+On remote device (kiwipi)
 ```
 git init --bare ~/repo/adxl-pi.git
 ```
 
-On local 
+On local
 ```
 git remote add kiwipi ssh://kiwipi/~/repo/adxl-pi.git
 ```
 
-Add post-receive hook on remote that links a tracked file. 
-In `~/repo/adxl-pi.git/hooks/post-receive` write 
+Add post-receive hook on remote that links a tracked file.
+In `~/repo/adxl-pi.git/hooks/post-receive` write
 
 ```bash
 #!/bin/bash
@@ -29,20 +29,20 @@ export GIT_WORK_TREE
 read oldrev newrev ref
 git show build:post-receive.sh | bash -s -- $ref
 ```
-Set file to executable (`chmod +x post-receive`). 
+Set file to executable (`chmod +x post-receive`).
 
 TODO : what does this first bit do?
 
-Git pipes to bash the version of `post-receive.sh` on branch `build` with a single argument, the ref. 
+Git pipes to bash the version of `post-receive.sh` on branch `build` with a single argument, the ref.
 
-### gitignore 
+### gitignore
 
-Start from [github's](https://github.com/github/gitignore/blob/master/C.gitignore). 
+Start from [github's](https://github.com/github/gitignore/blob/master/C.gitignore).
 
-Add: 
+Add:
 
 * build dir `build/`
-* ccls cache from editor `.ccls-cache` 
+* ccls cache from editor `.ccls-cache`
 
 ### post-receive shell + make
 
@@ -51,12 +51,17 @@ If yes, then copy the contents of the repo to a working directory, and run `make
 
 It remains to write the Makefile.
 
-## Reaching the adxl34x-spi lib 
+## Reaching the adxl34x-spi lib
 
-I cannot work out how to do this. 
+I cannot work out how to do this.
 There are kernel modules for adxl34x on both my laptop and the pi, but...
-I have no idea how to include them. 
+I have no idea how to include them.
 
-## Writing a new one 
+## Writing a new one
 
+Drawing some of the content of the adxl driver in linux,
+[this](https://github.com/nagimov/adxl345spi) github repo,
+and some example on arduino, I'm trying to write a driver.
+
+## Linting in C
 
