@@ -7,7 +7,6 @@ void printArr(char* arr, int arrLen) {
   for (int loop = 0; loop < arrLen; loop++) {
     printf("%d ", arr[loop]);
   }
-    printf("\n");
 }
 
 int readBytes(int handle, char *data, int count) {
