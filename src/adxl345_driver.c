@@ -23,5 +23,7 @@ int openAdxl(int spiSpeed) {
     return spiOpen(0, spiSpeed, 3);
 }
 
-
+int teardownAdxl() {
+    return gpioTerminate();
+}
 
