@@ -21,13 +21,8 @@ typedef struct {
 int setupAdxl(int spiSpeed, adxl conf) {
     int h = openAdxl(spiSpeed); 
     setAdxlRegister(h, BW_RATE, conf.bwRate);
-    char xArr[2];
-    xArr[0] = DATA_FORMAT;
-    xArr[1] = RANGE_PM_2g;
-    writeAdxlBytes(h, xArr, 2);
-    xArr[0] = POWER_CTL;
-    xArr[1] = PCTL_MEASURE;
-    writeAdxlBytes(h, xArr, 2);
+    setAdxlRegister(h, DATA_FORMAT, conf.dataFormat);
+    setAdxlRegister(h, POWER_CTL, conf.powerCtl);
     return h;
 }
 
@@ -49,6 +44,8 @@ int main() {
     // SPI sensor setup
     adxl conf;
     conf.bwRate = RATE_800_HZ;
+    conf.dataFormat = RANGE_PM_2g;
+    conf.powerCtl = PCTL_MEASURE;
     int h = setupAdxl(spiSpeed, conf); 
     int dataLen = 10;
     char data[dataLen];
