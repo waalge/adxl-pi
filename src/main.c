@@ -41,9 +41,7 @@ void getReading(int h, int16_t *x) {
   x[0] = ((int)data[2] << 8) | (int)data[1];
   x[1] = ((int)data[4] << 8) | (int)data[3];
   x[2] = ((int)data[6] << 8) | (int)data[5];
-  for (int loop = 0; loop < 10; loop++) {
-    printf("X,Y,Z %d %d %d\n", x[0], x[1], x[2]);
-  }
+  printf("X,Y,Z %d %d %d\n", x[0], x[1], x[2]);
 }
 
 int main() {
