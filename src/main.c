@@ -42,7 +42,7 @@ if (success == 0) {
     return 1;
 }
 
-   for(int loop = 0; loop < 7; loop++) { 
+   for(int loop = 0; loop < 6; loop++) { 
       printf("%d ", data[loop]);
    }
     printf("Done ;) \n");
