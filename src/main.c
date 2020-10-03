@@ -10,7 +10,7 @@
 const int timeDefault = 5;  // default duration of data stream, seconds
 const int freqDefault = 5;  // default sampling rate of data stream, Hz
 const int freqMax = 3200;  // maximal allowed cmdline arg sampling rate of data stream, Hz
-const int speedSPI = 2000000;  // SPI communication speed, bps
+const int spiSpeed = 2000000;  // SPI communication speed, bps
 const int freqMaxSPI = 100000;  // maximal possible communication sampling rate through SPI, Hz (assumption)
 const int coldStartSamples = 2;  // number of samples to be read before outputting data to console (cold start delays)
 const double coldStartDelay = 0.1;  // time delay between cold start reads
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     int samplesMaxSPI = freqMaxSPI * vTime;
     int success = 1;
     int h, bytes;
-    h = getSpi(); 
+    h = getSpi(spiSpeed); 
 
 
     char data[100];

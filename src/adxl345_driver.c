@@ -14,7 +14,7 @@ int writeBytes(int handle, char *data, int count) {
     return spiWrite(handle, data, count);
 }
 
-int getSpi() {
+int getSpi(int speedSPI) {
     gpioInitialise();
     if (gpioInitialise() < 0) {
         printf("Failed to initialize GPIO!");
