@@ -57,7 +57,7 @@ int main() {
   int16_t x[3];
   for (int loop = 0; loop < 10; loop++) {
     getReading(h, x);
-    msleep(10);
+    msleep(5);
   }
   getReading(h, x);
   int success = 1;
