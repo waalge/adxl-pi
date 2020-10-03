@@ -42,9 +42,9 @@ void getReading(int h, int8_t *x) {
   // x[0] = (int16_t)(data[1] << 8 | data[0]);
   // x[1] = (int16_t)(data[3] << 8 | data[2]);
   // x[2] = (int16_t)(data[5] << 8 | data[4]);
-  x[0] = (int8_t)(data[1];
-  x[1] = (int8_t)(data[3];
-  x[2] = (int8_t)(data[5];
+  x[0] = (int8_t)(data[1]);
+  x[1] = (int8_t)(data[3]);
+  x[2] = (int8_t)(data[5]);
   printf("# %d    %d    %d\n", x[0], x[1], x[2]);
 }
 
