@@ -38,6 +38,7 @@ int writeBytes(int handle, char *data, int count) {
 }
 
 int getSpi() {
+    gpioInitialise();
     int h;
     if (gpioInitialise() < 0) {
         printf("Failed to initialize GPIO!");
