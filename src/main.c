@@ -20,8 +20,8 @@ typedef struct {
 
 int setupAdxl(int spiSpeed, adxl conf) {
     int h = openAdxl(spiSpeed); 
-    char xArr[2];
     setAdxlRegister(h, BW_RATE, conf.bwRate);
+    char xArr[2];
     xArr[0] = DATA_FORMAT;
     xArr[1] = RANGE_PM_2g;
     writeAdxlBytes(h, xArr, 2);
