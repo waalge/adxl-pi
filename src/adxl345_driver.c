@@ -8,6 +8,8 @@ int readAdxlBytes(int handle, char *data, int count) {
   if (count > 1)
     data[0] |= MULTI_BIT;
   printf(" *** %d ", data[0]);
+  spiXfer(handle, data, data, count);
+  printf(" ##* %d ", data[0]);
   return spiXfer(handle, data, data, count);
 }
 
