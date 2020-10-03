@@ -58,7 +58,7 @@ if (success == 0) {
     printf("Error occurred!");
     return 1;
 }
-   printf("X,Y,Z %d %d %d\n", x,y,z);
+   printf("X,Y,Z %d %d %d\n", x[0], x[1], x[2]);
 
    for(int loop = 0; loop < dataLen; loop++) { 
       printf("%d ", data[loop]);
