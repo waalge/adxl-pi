@@ -24,7 +24,7 @@ int setupAdxl(int spiSpeed) {
     return h;
 }
 
-void getReading(int h, int16_t x, int16_t y, int16_t z) {
+void getReading(int h, int16_t * x) {
     int dataLen = 10;
     char data[dataLen];
     data[0] = DATAX0;
@@ -32,9 +32,9 @@ void getReading(int h, int16_t x, int16_t y, int16_t z) {
     if (bytes != dataLen) {
     printf("Error occurred!");
     }
-    x = (data[2]<<8)|data[1];
-    y = (data[4]<<8)|data[3];
-    z = (data[6]<<8)|data[5];
+    x[0] = (data[2]<<8)|data[1];
+    x[1] = (data[4]<<8)|data[3];
+    x[2] = (data[6]<<8)|data[5];
 }
 
 
@@ -43,7 +43,7 @@ int main() {
     int h = setupAdxl(spiSpeed); 
     int dataLen = 10;
     char data[dataLen];
-    int16_t x, y, z;
+    int16_t x[3];
     int success = 1;
     int bytes;
     data[0] = DATAX0;
@@ -51,7 +51,7 @@ int main() {
     if (bytes != dataLen) {
 	success = 0;
     }
-    getReading(h, x, y, z);
+    getReading(h, x);
 
 
 if (success == 0) {
