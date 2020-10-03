@@ -36,7 +36,7 @@ void getReading(int h, int16_t *x) {
     printf("Error occurred!");
   }
   printf("* " );
-  // printArr(data, dataLen);
+  printArr(data, dataLen);
   //
   x[0] = (int16_t)(data[1] << 8 | data[0]);
   x[1] = (int16_t)(data[3] << 8 | data[2]);
