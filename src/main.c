@@ -72,7 +72,7 @@ if (success == 0) {
    for(int loop = 0; loop < dataLen; loop++) { 
       printf("%d ", data[loop]);
    }
-    printf("Done ;) .\n");
+    printf("Done ;( .\n");
     return 0;
     teardownAdxl(); 
 }
