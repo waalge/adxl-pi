@@ -29,7 +29,7 @@ int setupAdxl(int spiSpeed, adxl conf) {
 }
 
 void getReading(int h, int16_t *x) {
-  int dataLen = 7;
+  int dataLen = 6;
   unsigned char data[dataLen];
   data[0] = DATAX0;
   int bytes = readAdxlBytes(h, DATAX0, dataLen, data);
@@ -52,7 +52,7 @@ int main() {
   conf.powerCtl = PCTL_MEASURE;
   int h = setupAdxl(spiSpeed, conf);
 
-  int dataLen = 7;
+  int dataLen = 6;
   unsigned char data[dataLen];
   int16_t x[3];
   for (int loop = 0; loop < 10; loop++) {
