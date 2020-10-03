@@ -41,7 +41,7 @@ void xgetreading(int h, int16_t *x) {
   x[0] = (int16_t)(data[2] << 8 | data[1]);
   x[1] = (int16_t)(data[4] << 8 | data[3]);
   x[2] = (int16_t)(data[6] << 8 | data[5]);
-  //printf("\n0# %i\t%i\t%i\t", x[0], x[1], x[2]);
+  printf("\n0# %i\t%i\t%i\t", x[0], x[1], x[2]);
 }
 
 int main() {
@@ -58,22 +58,6 @@ int main() {
   }
   int success = 1;
   int bytes;
-  int dataLen = 6;
-  char data[dataLen];
-  bytes = readAdxlBytes(h, DATAX0, dataLen, data);
-  if (bytes != dataLen) {
-    success = 0;
-  }
-
-  if (success == 0) {
-    printf("Error occurred!");
-    return 1;
-  }
-  printf("X,Y,Z %d %d %d\n", x[0], x[1], x[2]);
-
-  for (int loop = 0; loop < dataLen; loop++) {
-    printf("%d ", data[loop]);
-  }
   teardownAdxl();
   printf("Done ;( .\n");
   return 0;
