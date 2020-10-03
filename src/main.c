@@ -25,6 +25,7 @@ int setupAdxl(int spiSpeed, adxl conf) {
   setAdxlRegister(h, BW_RATE, conf.bwRate);
   setAdxlRegister(h, DATA_FORMAT, conf.dataFormat);
   setAdxlRegister(h, POWER_CTL, conf.powerCtl);
+  setAdxlRegister(h, FIFO_CTL, conf.fifoCtl);
   return h;
 }
 
@@ -44,12 +45,18 @@ void xgetreading(int h, int16_t *x) {
   printf("\n0# %i\t%i\t%i\t", x[0], x[1], x[2]);
 }
 
-int main() {
-  // SPI sensor setup
+adxl getConf () {
   adxl conf;
   conf.bwRate = RATE_800_HZ;
   conf.dataFormat = RANGE_PM_2g;
   conf.powerCtl = PCTL_MEASURE;
+  conf.fifoCtl = FIFO_STREAM;
+  return conf;
+}
+
+int main() {
+  // SPI sensor setup
+  conf = getConf();
   int h = setupAdxl(spiSpeed, conf);
   int16_t x[3];
   for (int loop = 0; loop < 10; loop++) {
