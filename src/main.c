@@ -9,7 +9,7 @@
 
 const int spiSpeed = 2000000;  // SPI communication speed, bps
 
-int setupAdxl(spiSpeed) {
+int setupAdxl(int spiSpeed) {
     int h = openAdxl(spiSpeed); 
     char xArr[2];
     xArr[0] = BW_RATE;
