@@ -14,12 +14,12 @@ int writeBytes(int handle, char *data, int count) {
     return spiWrite(handle, data, count);
 }
 
-int getSpi(int speedSPI) {
+int getSpi(int spiSpeed) {
     gpioInitialise();
     if (gpioInitialise() < 0) {
         printf("Failed to initialize GPIO!");
         return 1;
     }
-    return spiOpen(0, speedSPI, 3);
+    return spiOpen(0, spiSpeed, 3);
 }
 
