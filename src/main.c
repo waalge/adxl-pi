@@ -55,8 +55,6 @@ int main() {
   for (int loop = 0; loop < 10; loop++) {
     xgetreading(h, x);
     msleep(10);
-    getReading(h, x);
-    msleep(10);
   }
   int success = 1;
   int bytes;
