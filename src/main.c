@@ -37,9 +37,9 @@ void getReading(int h, int16_t *x) {
   if (bytes != dataLen) {
     printf("Error occurred!");
   }
-  x[0] = (((int)(data[1]) << 8) | (int)(data[0]);
-  x[1] = (((int)(data[3]) << 8) | (int)(data[2]);
-  x[2] = (((int)(data[5]) << 8) | (int)(data[4]);
+  x[0] = (int)(data[0]) | (((int)(data[1]) << 8);
+  x[1] = (int)(data[2]) | (((int)(data[3]) << 8);
+  x[2] = (int)(data[4]) | (((int)(data[5]) << 8);
   printf("X,Y,Z %d %d %d\n", x[0], x[1], x[2]);
 }
 
