@@ -44,21 +44,6 @@ void xgetreading(int h, int16_t *x) {
   //printf("\n0# %i\t%i\t%i\t", x[0], x[1], x[2]);
 }
 
-void getReading(int h, int16_t *x) {
-  int dataLen = 6;
-  char data[dataLen];
-  int bytes = readAdxlBytes(h, DATAX0, dataLen, data);
-  if (bytes != dataLen) {
-    printf("Error occurred!");
-  }
-  printf("\n1* " );
-  printArr(data, dataLen);
-  x[0] = (int16_t)(data[1] << 8 | data[0]);
-  x[1] = (int16_t)(data[3] << 8 | data[2]);
-  x[2] = (int16_t)(data[5] << 8 | data[4]);
-  //printf("\n1# %i\t%i\t%i\t", x[0], x[1], x[2]);
-}
-
 int main() {
   // SPI sensor setup
   adxl conf;

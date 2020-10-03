@@ -16,6 +16,7 @@ int readBytes(int handle, char *data, int count) {
 }
 
 int readAdxlBytes(int handle, int address, int count, char *data) {
+//This doesnt work . The seek on tx and rx are kept in sync with clock..
   address |= READ_BIT;
   if (count > 1)
     address |= MULTI_BIT;
