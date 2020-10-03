@@ -27,11 +27,11 @@ int setupAdxl(int spiSpeed, adxl conf) {
 }
 
 void getReading(int h, int16_t * x) {
-    int dataLen = 6;
-    char data[1 + dataLen];
+    int dataLen = 7;
+    char data[dataLen];
     data[0] = DATAX0;
-    int bytes = readAdxlBytes(h, data, 1 + dataLen);
-    if (bytes != 1 + dataLen) {
+    int bytes = readAdxlBytes(h, data, dataLen);
+    if (bytes != dataLen) {
     printf("Error occurred!");
     }
     x[0] = ((int)data[2]<<8)|(int)data[1];
