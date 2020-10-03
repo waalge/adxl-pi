@@ -51,7 +51,6 @@ int main() {
   conf.dataFormat = (RANGE_PM_2g & 3);
   conf.powerCtl = PCTL_MEASURE;
   int h = setupAdxl(spiSpeed, conf);
-
   int dataLen = 6;
   unsigned char data[dataLen];
   int16_t x[3];
