@@ -27,11 +27,11 @@ int setupAdxl(int spiSpeed) {
 int main() {
     // SPI sensor setup
     int h = setupAdxl(spiSpeed); 
-    char data[100];
+    char data[7];
     int16_t x, y, z;
     int success = 1;
     int bytes;
-    data[0] = 0x01;
+    data[0] = DATAX0;
     bytes = readAdxlBytes(h, data, 100);
     if (bytes != 100) {
 	success = 0;
@@ -42,7 +42,7 @@ if (success == 0) {
     return 1;
 }
 
-   for(int loop = 0; loop < 100; loop++) { 
+   for(int loop = 0; loop < 7; loop++) { 
       printf("%d ", data[loop]);
    }
     printf("Done ;) \n");
