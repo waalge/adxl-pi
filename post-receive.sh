@@ -10,6 +10,7 @@ then
 	git --work-tree=$TARGET --git-dir=$GIT_DIR checkout -f $BRANCH
 	cd $TARGET
 	make
+	sudo ./build/adxl.out
 else
 	echo "Ref $ref received. Doing nothing: only the ${BRANCH} branch may be deployed on this server."
 fi
