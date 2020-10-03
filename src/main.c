@@ -15,7 +15,6 @@
 #define POWER_CTL     0x2D
 #define DATAX0        0x32
 
-const char codeVersion[3] = "0.2";  // code version number
 const int timeDefault = 5;  // default duration of data stream, seconds
 const int freqDefault = 5;  // default sampling rate of data stream, Hz
 const int freqMax = 3200;  // maximal allowed cmdline arg sampling rate of data stream, Hz
@@ -39,7 +38,6 @@ int writeBytes(int handle, char *data, int count) {
 
 int getSpi() {
     gpioInitialise();
-    int h;
     if (gpioInitialise() < 0) {
         printf("Failed to initialize GPIO!");
         return 1;
@@ -92,6 +90,10 @@ int main(int argc, char *argv[]) {
             printf("Error occurred!");
             return 1;
         }
+
+   for(int loop = 0; loop < 100; loop++) { 
+      printf("%d ", data[loop]);
+   }
     printf("Done\n");
     return 0;
 }
