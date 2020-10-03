@@ -31,7 +31,6 @@ int setupAdxl(int spiSpeed, adxl conf) {
 void getReading(int h, int16_t *x) {
   int dataLen = 6;
   unsigned char data[dataLen];
-  data[0] = DATAX0;
   int bytes = readAdxlBytes(h, DATAX0, dataLen, data);
   printf("* " );
   printArr(data, dataLen);
