@@ -155,3 +155,5 @@ int setAdxlRegister(int handle, char address, char dat);
 int openAdxl(int spiSpeed);
 
 void teardownAdxl();
+
+void printArr(char* arr, int arrLen);
