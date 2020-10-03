@@ -56,7 +56,7 @@ int main() {
   for (int loop = 0; loop < 10; loop++) {
     getReading(h, x);
     printf("X,Y,Z %d %d %d\n", x[0], x[1], x[2]);
-    msleep(2);
+    msleep(20);
   }
   getReading(h, x);
   int success = 1;
