@@ -5,7 +5,7 @@
 
 void printArr(char* arr, int arrLen) {
   for (int loop = 0; loop < arrLen; loop++) {
-    printf("%d ", ((int)(arr[loop])) );
+    printf("%s ", (arr[loop]) );
   }
     printf("\n");
 }
