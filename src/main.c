@@ -48,7 +48,7 @@ int main() {
   // SPI sensor setup
   adxl conf;
   conf.bwRate = RATE_400_HZ;
-  conf.dataFormat = (RANGE_PM_2g & 3);
+  conf.dataFormat = (JUSTIFY | RANGE_PM_2g);
   conf.powerCtl = PCTL_MEASURE;
   int h = setupAdxl(spiSpeed, conf);
   int16_t x[3];
