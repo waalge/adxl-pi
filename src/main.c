@@ -31,7 +31,7 @@ void getReading(int h, int16_t * x) {
     char data[1 + dataLen];
     data[0] = DATAX0;
     int bytes = readAdxlBytes(h, data, 1 + dataLen);
-    if (bytes != dataLen) {
+    if (bytes != 1 + dataLen) {
     printf("Error occurred!");
     }
     x[0] = ((int)data[2]<<8)|(int)data[1];
