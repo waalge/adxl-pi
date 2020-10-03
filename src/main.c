@@ -28,7 +28,7 @@ int setupAdxl(int spiSpeed, adxl conf) {
   return h;
 }
 
-void getReading(int h, int *x) {
+void getReading(int h, int16_t *x) {
   int dataLen = 6;
   unsigned char data[dataLen];
   int bytes = readAdxlBytes(h, DATAX0, dataLen, data);
@@ -37,9 +37,9 @@ void getReading(int h, int *x) {
   if (bytes != dataLen) {
     printf("Error occurred!");
   }
-  x[0] = (int)(data[0]) | (((int)(data[1])) << 8);
-  x[1] = (int)(data[2]) | (((int)(data[3])) << 8);
-  x[2] = (int)(data[4]) | (((int)(data[5])) << 8);
+  x[0] = (data[1] << 8) | data[0];
+  x[1] = (data[3] << 8) | data[2];
+  x[2] = (data[5] << 8) | data[4];
   printf("X,Y,Z %d %d %d\n", x[0], x[1], x[2]);
 }
 
@@ -50,7 +50,7 @@ int main() {
   conf.dataFormat = RANGE_PM_2g;
   conf.powerCtl = PCTL_MEASURE;
   int h = setupAdxl(spiSpeed, conf);
-  int x[3];
+  int16_t x[3];
   for (int loop = 0; loop < 10; loop++) {
     getReading(h, x);
     msleep(5);
