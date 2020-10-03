@@ -28,7 +28,7 @@ int setupAdxl(int spiSpeed, adxl conf) {
   return h;
 }
 
-void ogetReading(int h, int16_t *x) {
+void xgetreading(int h, int16_t *x) {
   int dataLen = 7;
   char data[dataLen];
   data[0] = DATAX0;
@@ -68,7 +68,7 @@ int main() {
   int h = setupAdxl(spiSpeed, conf);
   int16_t x[3];
   for (int loop = 0; loop < 10; loop++) {
-    ogetReading(h, x);
+    xgetreading(h, x);
     msleep(10);
     getReading(h, x);
     msleep(10);
