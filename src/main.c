@@ -37,9 +37,9 @@ void getReading(int h, int *x) {
   }
   printf("* " );
   printArr(data, dataLen);
-  x[0] = ((int)data[1] << 8) | (int)data[0];
-  x[1] = ((int)data[3] << 8) | (int)data[2];
-  x[2] = ((int)data[5] << 8) | (int)data[4];
+  x[0] = (((int)data[1]) << 8) | (int)data[0];
+  x[1] = (((int)data[3]) << 8) | (int)data[2];
+  x[2] = (((int)data[5]) << 8) | (int)data[4];
   printf("# %d    %d    %d\n", x[0], x[1], x[2]);
 }
 
