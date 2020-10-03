@@ -109,7 +109,7 @@
 #define RANGE_PM_2g 0
 #define RANGE_PM_4g 1
 #define RANGE_PM_8g 2
-#define RANGE_PM_16g  3
+#define RANGE_PM_16g 3
 
 /*
    Maximum value our axis may get in full res mode for the input device
