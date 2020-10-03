@@ -10,7 +10,7 @@ void printArr(char* arr, int arrLen) {
     printf("\n");
 }
 
-int readAdxlBytes(int handle, char *data, int count) {
+int readAdxlBytes(int handle, unsigned char *data, int count) {
   data[0] |= READ_BIT;
   if (count > 1)
     data[0] |= MULTI_BIT;
