@@ -10,10 +10,10 @@
 const int spiSpeed = 2000000;  // SPI communication speed, bps
 
 typedef struct {
-	int bwRate;
-	int dataFormat;
-	int powerCtl;
-	int fifoCtl;
+	char bwRate;
+	char dataFormat;
+	char powerCtl;
+	char fifoCtl;
 } adxl;
 
 
