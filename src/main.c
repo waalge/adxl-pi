@@ -43,13 +43,14 @@ void getReading(int h, int16_t * x) {
 int main() {
     // SPI sensor setup
     adxl conf;
-    conf.bwRate = RATE_3200_HZ;
+    conf.bwRate = RATE_100_HZ;
     conf.dataFormat = RANGE_PM_4g;
     conf.powerCtl = PCTL_MEASURE;
     int h = setupAdxl(spiSpeed, conf); 
     int dataLen = 7;
     char data[dataLen];
     int16_t x[3];
+    getReading(h, x);
     int success = 1;
     int bytes;
     data[0] = DATAX0;
@@ -57,7 +58,6 @@ int main() {
     if (bytes != dataLen) {
 	success = 0;
     }
-    getReading(h, x);
 
 if (success == 0) {
     printf("Error occurred!");
