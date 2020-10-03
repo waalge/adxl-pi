@@ -26,7 +26,7 @@ int setupAdxl(spiSpeed) {
 
 int main() {
     // SPI sensor setup
-    h = setupAdxl(spiSpeed); 
+    int h = setupAdxl(spiSpeed); 
     char data[100];
     int16_t x, y, z;
     int success = 1;
