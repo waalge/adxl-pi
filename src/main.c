@@ -44,12 +44,16 @@ int main() {
     // SPI sensor setup
     adxl conf;
     conf.bwRate = RATE_800_HZ;
-    conf.dataFormat = FULL_RES ||  RANGE_PM_2g;
+    conf.dataFormat = JUSTIFY || RANGE_PM_2g;
     conf.powerCtl = PCTL_MEASURE;
     int h = setupAdxl(spiSpeed, conf); 
     int dataLen = 7;
     char data[dataLen];
     int16_t x[3];
+    for (int loop = 0; loop < 10; loop++) {
+    getReading(h, x);
+    printf("X,Y,Z %d %d %d\n", x[0], x[1], x[2]);
+    }
     getReading(h, x);
     int success = 1;
     int bytes;
