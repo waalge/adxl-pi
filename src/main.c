@@ -30,23 +30,23 @@ int setupAdxl(int spiSpeed, adxl conf) {
 
 void getReading(int h, int *x) {
   int dataLen = 6;
-  char data[dataLen];
+  unsigned char data[dataLen];
   int bytes = readAdxlBytes(h, DATAX0, dataLen, data);
   if (bytes != dataLen) {
     printf("Error occurred!");
   }
   printf("* " );
   printArr(data, dataLen);
-  x[0] = (((int)data[1]) << 8) | (int)data[0];
-  x[1] = (((int)data[3]) << 8) | (int)data[2];
-  x[2] = (((int)data[5]) << 8) | (int)data[4];
+  x[0] = data[1] << 8 | data[0];
+  x[1] = data[3] << 8 | data[2];
+  x[2] = data[5] << 8 | data[4];
   printf("# %d    %d    %d\n", x[0], x[1], x[2]);
 }
 
 int main() {
   // SPI sensor setup
   adxl conf;
-  conf.bwRate = RATE_800_HZ;
+  conf.bwRate = RATE_400_HZ;
   conf.dataFormat = RANGE_PM_2g;
   conf.powerCtl = PCTL_MEASURE;
   int h = setupAdxl(spiSpeed, conf);
@@ -58,7 +58,7 @@ int main() {
   int success = 1;
   int bytes;
   int dataLen = 6;
-  char data[dataLen];
+  unsigned char data[dataLen];
   bytes = readAdxlBytes(h, DATAX0, dataLen, data);
   if (bytes != dataLen) {
     success = 0;
