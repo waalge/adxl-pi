@@ -56,7 +56,7 @@ adxl getConf () {
 
 int main() {
   // SPI sensor setup
-  conf = getConf();
+  adxl conf = getConf();
   int h = setupAdxl(spiSpeed, conf);
   int16_t x[3];
   for (int loop = 0; loop < 10; loop++) {
