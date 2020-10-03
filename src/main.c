@@ -32,11 +32,10 @@ int main() {
     int success = 1;
     int bytes;
     data[0] = DATAX0;
-    bytes = readAdxlBytes(h, data, 100);
+    bytes = readAdxlBytes(h, data, 7);
     if (bytes != 100) {
 	success = 0;
     }
-    teardownAdxl(); 
 if (success == 0) {
     printf("Error occurred!");
     return 1;
@@ -45,6 +44,7 @@ if (success == 0) {
    for(int loop = 0; loop < 6; loop++) { 
       printf("%d ", data[loop]);
    }
-    printf("Done ;) \n");
+    printf("Done ;) .\n");
     return 0;
+    teardownAdxl(); 
 }
