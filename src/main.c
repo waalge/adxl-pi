@@ -47,7 +47,7 @@ void getReading(int h, int16_t *x) {
 int main() {
   // SPI sensor setup
   adxl conf;
-  conf.bwRate = RATE_3200_HZ;
+  conf.bwRate = RATE_400_Hz;
   conf.dataFormat = (RANGE_PM_2g & 3);
   conf.powerCtl = PCTL_MEASURE;
   int h = setupAdxl(spiSpeed, conf);
