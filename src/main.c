@@ -4,7 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 
+int msleep(unsigned int tms) {
+  return usleep(tms * 1000);
+}
 #include "adxl345_driver.h"
 
 const int spiSpeed = 2000000; // SPI communication speed, bps
@@ -52,6 +56,7 @@ int main() {
   for (int loop = 0; loop < 10; loop++) {
     getReading(h, x);
     printf("X,Y,Z %d %d %d\n", x[0], x[1], x[2]);
+    msleep(2);
   }
   getReading(h, x);
   int success = 1;
