@@ -144,3 +144,10 @@
 
 
 /* /////////////////// ADXL345 DRIVER FUNDAMENTALS ////////////////// */
+
+
+int readAdxlBytes(int handle, char *data, int count);
+
+int writeAdxlBytes(int handle, char *data, int count);
+
+int openAdxl(int spiSpeed);
