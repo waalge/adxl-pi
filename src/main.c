@@ -36,8 +36,8 @@ void ogetReading(int h, int16_t *x) {
   if (bytes != dataLen) {
     printf("Error occurred!");
   }
-  printf("0* " );
-  printArr(data, dataLen);
+  //printf("0* " );
+  //printArr(data, dataLen);
   x[0] = (int16_t)(data[2] << 8 | data[1]);
   x[1] = (int16_t)(data[4] << 8 | data[3]);
   x[2] = (int16_t)(data[6] << 8 | data[5]);
@@ -51,8 +51,8 @@ void getReading(int h, int16_t *x) {
   if (bytes != dataLen) {
     printf("Error occurred!");
   }
-  printf("1* " );
-  printArr(data, dataLen);
+  //printf("1* " );
+  //printArr(data, dataLen);
   x[0] = (int16_t)(data[1] << 8 | data[0]);
   x[1] = (int16_t)(data[3] << 8 | data[2]);
   x[2] = (int16_t)(data[5] << 8 | data[4]);
