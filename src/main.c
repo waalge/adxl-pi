@@ -68,6 +68,6 @@ int main(int argc, char *argv[]) {
    for(int loop = 0; loop < 100; loop++) { 
       printf("%d ", data[loop]);
    }
-    printf("Done\n");
+    printf("Done ;) \n");
     return 0;
 }
