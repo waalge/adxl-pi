@@ -4,12 +4,12 @@
 #define MULTI_BIT 0x40
 
 int readAdxlBytes(int handle, char *data, int count) {
+  printf(" #1* %d ", data[0]);
   data[0] |= READ_BIT;
+  printf(" #2* %d ", data[0]);
   if (count > 1)
     data[0] |= MULTI_BIT;
-  printf(" *** %d ", data[0]);
-  spiXfer(handle, data, data, count);
-  printf(" ##* %d ", data[0]);
+  printf(" #3* %d ", data[0]);
   return spiXfer(handle, data, data, count);
 }
 
