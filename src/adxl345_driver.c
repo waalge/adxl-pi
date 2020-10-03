@@ -26,7 +26,7 @@ int openAdxl(int spiSpeed) {
         printf("Failed to initialize GPIO!");
         return 1;
     }
-    return spiOpen(0, spiSpeed, 4);
+    return spiOpen(0, spiSpeed, 3);
 }
 
 void teardownAdxl() {
