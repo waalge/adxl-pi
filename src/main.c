@@ -24,6 +24,20 @@ int setupAdxl(int spiSpeed) {
     return h;
 }
 
+void getReading(int h, int16_t x, int16_t y, int16_t z) {
+    int dataLen = 10;
+    char data[dataLen];
+    data[0] = DATAX0;
+    int bytes = readAdxlBytes(h, data, dataLen);
+    if (bytes != dataLen) {
+    printf("Error occurred!");
+    }
+    x = (data[2]<<8)|data[1];
+    y = (data[4]<<8)|data[3];
+    z = (data[6]<<8)|data[5];
+}
+
+
 int main() {
     // SPI sensor setup
     int h = setupAdxl(spiSpeed); 
@@ -37,10 +51,9 @@ int main() {
     if (bytes != dataLen) {
 	success = 0;
     }
+    getReading(h, x, y, z);
 
-    x = (data[2]<<8)|data[1];
-    y = (data[4]<<8)|data[3];
-    z = (data[6]<<8)|data[5];
+
 if (success == 0) {
     printf("Error occurred!");
     return 1;
