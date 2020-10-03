@@ -7,6 +7,8 @@
 
 #include "adxl345_driver.h"
 
+#define DATA_FORMAT_B 0x0B  // data format bytes: +/- 16g range, 13-bit resolution (p. 26 of ADXL345 datasheet)
+
 const int timeDefault = 5;  // default duration of data stream, seconds
 const int freqDefault = 5;  // default sampling rate of data stream, Hz
 const int freqMax = 3200;  // maximal allowed cmdline arg sampling rate of data stream, Hz
