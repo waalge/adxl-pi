@@ -41,7 +41,7 @@ void ogetReading(int h, int16_t *x) {
   x[0] = (int16_t)(data[2] << 8 | data[1]);
   x[1] = (int16_t)(data[4] << 8 | data[3]);
   x[2] = (int16_t)(data[6] << 8 | data[5]);
-  printf("   \t0# %i\t%i\t%i\t \n", x[0], x[1], x[2]);
+  printf("\n0# %i\t%i\t%i\t", x[0], x[1], x[2]);
 }
 
 void getReading(int h, int16_t *x) {
