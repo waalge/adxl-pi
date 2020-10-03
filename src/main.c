@@ -45,7 +45,7 @@ if (success == 0) {
     printf("Error occurred!");
     return 1;
 }
-   printf("X,Y,Z %d %d %d ", x,y,z);
+   printf("X,Y,Z %d %d %d\n", x,y,z);
 
    for(int loop = 0; loop < dataLen; loop++) { 
       printf("%d ", data[loop]);
