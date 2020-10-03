@@ -28,6 +28,22 @@ int setupAdxl(int spiSpeed, adxl conf) {
   return h;
 }
 
+void ogetReading(int h, int16_t *x) {
+  int dataLen = 7;
+  char data[dataLen];
+  data[0] = DATAX0
+  int bytes = readBytes(h, data, 7);
+  if (bytes != dataLen) {
+    printf("Error occurred!");
+  }
+  printf("* " );
+  printArr(data, dataLen);
+  x[0] = (int16_t)(data[2] << 8 | data[1]);
+  x[1] = (int16_t)(data[4] << 8 | data[3]);
+  x[2] = (int16_t)(data[6] << 8 | data[5]);
+  printf("# %i    %i    %i\n", x[0], x[1], x[2]);
+}
+
 void getReading(int h, int16_t *x) {
   int dataLen = 6;
   char data[dataLen];
@@ -52,7 +68,7 @@ int main() {
   int h = setupAdxl(spiSpeed, conf);
   int16_t x[3];
   for (int loop = 0; loop < 10; loop++) {
-    getReading(h, x);
+    ogetReading(h, x);
     msleep(10);
   }
   int success = 1;

@@ -10,6 +10,12 @@ void printArr(char* arr, int arrLen) {
     printf("\n");
 }
 
+int readBytes(int handle, char *data, int count) {
+    data[0] |= READ_BIT;
+    if (count > 1) data[0] |= MULTI_BIT;
+    return spiXfer(handle, data, data, count);
+}
+
 int readAdxlBytes(int handle, int address, int count, char *data) {
   address |= READ_BIT;
   if (count > 1)
