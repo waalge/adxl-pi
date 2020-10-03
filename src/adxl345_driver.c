@@ -15,7 +15,9 @@ int writeAdxlBytes(int handle, char *data, int count) {
 }
 
 int setAdxlRegister(int handle, char address, char dat) {
-    char * data = {address, dat};
+    char * data[2];
+    data[0] = address;
+    data[1] = dat;
     return spiWrite(handle, data, 2);
 }
 
