@@ -9,12 +9,12 @@ int readAdxlBytes(int handle, char *data, int count) {
     return spiXfer(handle, data, data, count);
 }
 
-int writeBytes(int handle, char *data, int count) {
+int writeAdxlBytes(int handle, char *data, int count) {
     if (count > 1) data[0] |= MULTI_BIT;
     return spiWrite(handle, data, count);
 }
 
-int getSpi(int spiSpeed) {
+int openAdxl(int spiSpeed) {
     gpioInitialise();
     if (gpioInitialise() < 0) {
         printf("Failed to initialize GPIO!");
