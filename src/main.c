@@ -52,7 +52,7 @@ int main() {
   int h = setupAdxl(spiSpeed, conf);
 
   int dataLen = 7;
-  char data[dataLen];
+  unsigned char data[dataLen];
   int16_t x[3];
   for (int loop = 0; loop < 10; loop++) {
     getReading(h, x);
