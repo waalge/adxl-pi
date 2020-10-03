@@ -3,13 +3,22 @@
 #define READ_BIT 0x80
 #define MULTI_BIT 0x40
 
+void printArr(char* arr, int arrLen) {
+  for (int loop = 0; loop < arrLen; loop++) {
+    printf("%d ", arr[loop]);
+  }
+}
+
 int readAdxlBytes(int handle, char *data, int count) {
-  printf(" #1* %d ", data[0]);
+  printf("\n #1* ");
+  printArr(data, count);
   data[0] |= READ_BIT;
-  printf(" #2* %d ", data[0]);
+  printf("\n #2* ");
+  printArr(data, count);
   if (count > 1)
     data[0] |= MULTI_BIT;
-  printf(" #3* %d ", data[0]);
+  printf("\n #3* ");
+  printArr(data, count);
   return spiXfer(handle, data, data, count);
 }
 
