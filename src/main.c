@@ -26,7 +26,7 @@ int setupAdxl(int spiSpeed, adxl conf) {
     return h;
 }
 
-void getReading(int h, int16_t * x) {
+void getReading(int h, int * x) {
     int dataLen = 8;
     char data[dataLen];
     data[0] = DATAX0;
@@ -49,7 +49,7 @@ int main() {
     int h = setupAdxl(spiSpeed, conf); 
     int dataLen = 7;
     char data[dataLen];
-    int16_t x[3];
+    int x[3];
     for (int loop = 0; loop < 10; loop++) {
     getReading(h, x);
     printf("X,Y,Z %d %d %d\n", x[0], x[1], x[2]);
