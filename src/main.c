@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     int samplesMaxSPI = freqMaxSPI * vTime;
     int success = 1;
     int h, bytes;
-    h = getSpi(spiSpeed); 
+    h = openAdxl(spiSpeed); 
 
 
     char data[100];
@@ -37,13 +37,13 @@ int main(int argc, char *argv[]) {
     double tStart, tDuration, t;
     data[0] = BW_RATE;
     data[1] = 0x0F;
-    writeBytes(h, data, 2);
+    writeAdxlBytes(h, data, 2);
     data[0] = DATA_FORMAT;
     data[1] = DATA_FORMAT_B;
-    writeBytes(h, data, 2);
+    writeAdxlBytes(h, data, 2);
     data[0] = POWER_CTL;
     data[1] = 0x08;
-    writeBytes(h, data, 2);
+    writeAdxlBytes(h, data, 2);
 
     double delay = 1.0 / vFreq;  // delay between reads in seconds
 
@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
     // but always less than the specified value, since reading takes some time
 
     data[0] = 0x01;
-    bytes = readBytes(h, data, 100);
+    bytes = readAdxlBytes(h, data, 100);
     if (bytes != 100) {
 	success = 0;
     }
