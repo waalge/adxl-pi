@@ -73,4 +73,5 @@ if (success == 0) {
     printf("Done ;( .\n");
     return 0;
     teardownAdxl();
+
 }
