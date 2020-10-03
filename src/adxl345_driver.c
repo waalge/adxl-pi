@@ -1,5 +1,4 @@
 #include "adxl345_driver.h"
-:wa
 
 #define READ_BIT      0x80
 #define MULTI_BIT     0x40
