@@ -9,12 +9,17 @@
 
 const int spiSpeed = 2000000;  // SPI communication speed, bps
 
-int setupAdxl(int spiSpeed) {
+typedef struct {
+	int bwRate;
+	int dataFormat;
+	int powerCtl;
+	int fifoCtl;
+} adxl;
+
+int setupAdxl(int spiSpeed, adxl conf) {
     int h = openAdxl(spiSpeed); 
     char xArr[2];
-    xArr[0] = BW_RATE;
-    xArr[1] = RATE_800_HZ;
-    writeAdxlBytes(h, xArr, 2);
+    writeAdxlBytes(h, {BW_RATE, conf.bwRate}, 2);
     xArr[0] = DATA_FORMAT;
     xArr[1] = RANGE_PM_2g;
     writeAdxlBytes(h, xArr, 2);
@@ -40,7 +45,9 @@ void getReading(int h, int16_t * x) {
 
 int main() {
     // SPI sensor setup
-    int h = setupAdxl(spiSpeed); 
+    adxl conf;
+    conf.bwRate = RATE_800_HZ;
+    int h = setupAdxl(spiSpeed, conf); 
     int dataLen = 10;
     char data[dataLen];
     int16_t x[3];
