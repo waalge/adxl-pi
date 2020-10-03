@@ -5,15 +5,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "adxl345_driver.h"
+
 #define DATA_FORMAT   0x31  // data format register address
 #define DATA_FORMAT_B 0x0B  // data format bytes: +/- 16g range, 13-bit resolution (p. 26 of ADXL345 datasheet)
 
 #define READ_BIT      0x80
 #define MULTI_BIT     0x40
-
-#define BW_RATE       0x2C
-#define POWER_CTL     0x2D
-#define DATAX0        0x32
 
 const int timeDefault = 5;  // default duration of data stream, seconds
 const int freqDefault = 5;  // default sampling rate of data stream, Hz
