@@ -14,6 +14,12 @@ int writeAdxlBytes(int handle, char *data, int count) {
     return spiWrite(handle, data, count);
 }
 
+int setAdxlRegister(int handle, int address, int dat) {
+    int * data = {address, dat};
+    return spiWrite(handle, data, 2);
+}
+
+
 int openAdxl(int spiSpeed) {
     gpioInitialise();
     if (gpioInitialise() < 0) {

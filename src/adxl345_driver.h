@@ -150,6 +150,8 @@ int readAdxlBytes(int handle, char *data, int count);
 
 int writeAdxlBytes(int handle, char *data, int count);
 
+int setAdxlRegister(int handle, int address, int dat);
+
 int openAdxl(int spiSpeed);
 
 void teardownAdxl();

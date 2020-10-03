@@ -16,10 +16,12 @@ typedef struct {
 	int fifoCtl;
 } adxl;
 
+
+
 int setupAdxl(int spiSpeed, adxl conf) {
     int h = openAdxl(spiSpeed); 
     char xArr[2];
-    writeAdxlBytes(h, {BW_RATE, conf.bwRate}, 2);
+    setAdxlRegister(h, BW_RATE, conf.bwRate);
     xArr[0] = DATA_FORMAT;
     xArr[1] = RANGE_PM_2g;
     writeAdxlBytes(h, xArr, 2);
