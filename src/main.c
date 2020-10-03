@@ -32,10 +32,7 @@ void ogetReading(int h, int16_t *x) {
   int dataLen = 7;
   char data[dataLen];
   data[0] = DATAX0
-  int bytes = readBytes(h, data, 7);
-  if (bytes != dataLen) {
-    printf("Error occurred!");
-  }
+  readBytes(h, data, 7);
   printf("* " );
   printArr(data, dataLen);
   x[0] = (int16_t)(data[2] << 8 | data[1]);
