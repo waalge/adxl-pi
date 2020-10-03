@@ -41,7 +41,7 @@ void getReading(int h, int16_t *x) {
   x[0] = (int16_t)((data[1] << 8) | data[0]);
   x[1] = (int16_t)((data[3] << 8) | data[2]);
   x[2] = (int16_t)((data[5] << 8) | data[4]);
-  printf("# %d    %d    %d\n", x[0], x[1], x[2]);
+  printf("# %i    %i    %i\n", x[0], x[1], x[2]);
 }
 
 int main() {
