@@ -29,6 +29,7 @@ int main() {
   int16_t triple[3];
   for (int loop = 0; loop < 10; loop++) {
     readAdxlTriple(devId, triple);
+    printArr(triple, 3);
     msleep(10);
   }
   int success = 1;
