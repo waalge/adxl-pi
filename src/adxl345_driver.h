@@ -150,7 +150,7 @@
 /* /////////////////// ADXL345 DRIVER FUNDAMENTALS ////////////////// */
 
 
-// Config
+// Setup/ teardown
 
 typedef struct {
   char bwRate;
@@ -163,17 +163,19 @@ int openAdxl(int spiSpeed);
 
 int setupAdxl(int spiSpeed, adxlConfig conf);
 
-//
+void teardownAdxl();
+
+// read/ write methods
 
 int readAdxlBytes(int handle, char *data, int count);
 
-void readAdxlTriple(int devId, int16_t *triple) {
+void readAdxlTriple(int devId, int16_t *triple);
 
 int writeAdxlBytes(int handle, char *data, int count);
 
 int setAdxlRegister(int handle, char address, char dat);
 
-
-void teardownAdxl();
+// utils
 
 void printArr(char* arr, int arrLen);
+
