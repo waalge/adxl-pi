@@ -65,3 +65,6 @@ and some example on arduino, I'm trying to write a driver.
 
 ## Linting in C
 
+Using clang-format but pre-commit hook does not seem to be running :shrug:
+
+
