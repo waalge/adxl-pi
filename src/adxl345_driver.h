@@ -1,5 +1,8 @@
-#include <pigpio.h>
 #include <stdio.h>
+#include <unistd.h>
+
+#include <pigpio.h>
+
 /* /////////////////// ADXL345 DRIVER FUNDAMENTALS ////////////////// */
 // SOURCE :
 // https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/input/misc/adxl34x.c?id=HEAD
@@ -146,15 +149,30 @@
 
 /* /////////////////// ADXL345 DRIVER FUNDAMENTALS ////////////////// */
 
-int readBytes(int handle, char *data, int count);
 
-int readAdxlBytes(int handle, int address, int count, char *data);
+// Config
+
+typedef struct {
+  char bwRate;
+  char dataFormat;
+  char powerCtl;
+  char fifoCtl;
+} adxlConfig;
+
+int openAdxl(int spiSpeed);
+
+int setupAdxl(int spiSpeed, adxlConfig conf);
+
+//
+
+int readAdxlBytes(int handle, char *data, int count);
+
+void readAdxlTriple(int devId, int16_t *triple) {
 
 int writeAdxlBytes(int handle, char *data, int count);
 
 int setAdxlRegister(int handle, char address, char dat);
 
-int openAdxl(int spiSpeed);
 
 void teardownAdxl();
 
